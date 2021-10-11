@@ -2,19 +2,65 @@
 <html>
     <head>
         <meta charset="utf-8" />
-        <title></title>
-		
-        <meta name="description" content="" />
+        <title>units-wasm</title>
+
+        <meta name="description" content="units port for the web" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link href="css/bootstrap.min.css" rel="stylesheet" />
     </head>
     <body>
-	
-	<script src="./a.out.js"></script>
-	<script>
-		Module.onRuntimeInitialized = async _ => {
-		   // Do a first initial calculation, to speedup all subsequent calls
-		   var initValue = Module.ccall('convert_unit', 'string', ['string', 'string'], ['1inch', 'm']);
-		};
-	</script>
 
+        <div class="container px-4">
+            <div class="row justify-content-center gx-5">
+                <div class="col-12 mt-3">
+
+                    <div class="alert alert-primary" id="result">
+                        Result: <strong class="fs-4 text"></strong>
+                        <button type="button" id="copy-result" class="btn btn-sm btn-outline-primary position-absolute top-0 end-0 m-2">
+                            Copy
+                        </button>
+                    </div>
+
+                    <form id="main">
+
+                        <div class="mb-3">
+                            <label for="have-value" class="form-label">What value do you have?</label>
+                            <input type="text" placeholder="" id="have-value" class="form-control" />
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="have-unit" class="form-label">What unit do you have?</label>
+                            <input type="text" placeholder="" id="have-unit" class="form-control" />
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="want-unit" class="form-label">What unit do you want?</label>
+                            <input type="text" placeholder="" id="want-unit" class="form-control" />
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Calculate</button>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+
+
+
+        <div id="loader" class="position-fixed top-0 start-0 w-100 h-100 bg-light">
+            <div class="d-flex justify-content-center position-absolute top-50 start-50 translate-middle ">
+                <div class="spinner-border" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+        <script src="./a.out.js"></script>
+        <script src="./js/bootstrap.bundle.min.js"></script>
+        <script src="./js/main.js"></script>
     </body>
 </html>
