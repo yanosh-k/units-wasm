@@ -12,7 +12,7 @@
 	<script>
 		Module.onRuntimeInitialized = async _ => {
 		   // Do a first initial calculation, to speedup all subsequent calls
-		   var initValue = Module.ccall('get_value', 'string', ['string', 'string'], ['1inch', 'm']);
+		   var initValue = Module.ccall('convert_unit', 'string', ['string', 'string'], ['1inch', 'm']);
 		};
 	</script>
 
