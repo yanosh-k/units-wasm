@@ -1,0 +1,20 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title></title>
+		
+        <meta name="description" content="" />
+    </head>
+    <body>
+	
+	<script src="./a.out.js"></script>
+	<script>
+		Module.onRuntimeInitialized = async _ => {
+		   // Do a first initial calculation, to speedup all subsequent calls
+		   var initValue = Module.ccall('get_value', 'string', ['string', 'string'], ['1inch', 'm']);
+		};
+	</script>
+
+    </body>
+</html>
