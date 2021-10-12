@@ -18,6 +18,11 @@ var _app = {
     bind: function () {
         document.getElementById('main').addEventListener('submit', _app.onMainFormSubmit);
         document.getElementById('create-convertor').addEventListener('submit', _app.onCreateConvertorFormSubmit);
+        document.getElementById('accordion-root').addEventListener('submit', function (event) {
+            if (event.target.classList.contains('convertor')) {
+                _app.onConvertorFormSubmit.apply(event.target, [event]);
+            }
+        });
         document.getElementById('copy-result').addEventListener('click', _app.onCopyResultClick);
         document.addEventListener('runtime-init', _app.onRuntimeInit);
     },
@@ -44,10 +49,9 @@ var _app = {
         var convertorsHolder = document.getElementById('accordion-root');
 
         for (var convertorId in convertorsList) {
-            var convertorName = convertorsList[convertorId].name;
-            var youHave = convertorsList[convertorId].you_have;
-            var youWant = convertorsList[convertorId].you_want;
-            var youHaveUnit = youHave.replace(/\s*@X@\s*/g, '');
+            var convertorName = _app.escapeHtml(convertorsList[convertorId].name);
+            var youHave = _app.escapeHtml(convertorsList[convertorId].you_have);
+            var youWant = _app.escapeHtml(convertorsList[convertorId].you_want);
             var convertorHtml = `
             <div class="accordion-item">
                 <h2 class="accordion-header" id="accordion-item-${convertorId}-header">
@@ -62,7 +66,7 @@ var _app = {
                                 <input type="hidden" class="you-have" value="${youHave}" />
                                 <input type="hidden" class="you-want" value="${youWant}" />
                                 <input type="text" autocapitalize="none" autocomplete="off" class="form-control you-have-value" />
-                                <button type="button" class="btn btn-primary">Convert</button>
+                                <button type="submit" class="btn btn-primary">Convert</button>
                             </div>
                         </form>
                     </div>
@@ -71,11 +75,19 @@ var _app = {
 
             convertorsHolder.insertAdjacentHTML('beforeend', convertorHtml);
         }
-
-
+    },
+    
+    // Hanld convertors submission
+    onConvertorFormSubmit: function(event) {
+        event.preventDefault();
+        var youHaveValue = this.querySelector('.you-have-value').value;
+        var youHave = this.querySelector('.you-have').value.replace(/@X@/g, youHaveValue);
+        var youWant = this.querySelector('.you-want').value;
+        
+        Module.ccall('convert_unit', 'string', ['string', 'string'], [youHave, youWant]);
     },
 
-    // Hnadle runtime initilization event
+    // Handle runtime initilization event
     onRuntimeInit: function () {
         // Do a first initial calculation, to speedup all subsequent calls
         Module.ccall('convert_unit', 'string', ['string', 'string'], ['1inch', 'm']);
@@ -203,6 +215,16 @@ var _app = {
         };
 
         return defaultConvertors;
+    },
+
+    // encode HTML special characters
+    escapeHtml: function (unsafe) {
+        return unsafe
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
     }
 
 
