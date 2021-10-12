@@ -53,12 +53,12 @@ var _app = {
         var convertorsList = _app.getConvertorsList();
         var convertorsHolder = document.getElementById('accordion-root');
         var activeConvertors = document.querySelectorAll('.accordion-item-convertor');
-        
+
         // Remove the old covnertors from the html
         for (var i = 0; i < activeConvertors.length; i++) {
             activeConvertors[i].remove();
         }
-        
+
         // Add the convertors to the html
         for (var convertorId in convertorsList) {
             var convertorName = _app.escapeHtml(convertorsList[convertorId].name);
@@ -76,9 +76,16 @@ var _app = {
                         <form class="convertor">
                             <input type="hidden" class="you-have" value="${youHave}" />
                             <input type="hidden" class="you-want" value="${youWant}" />
-                            <div class="input-group">
+                            <div class="input-group mb-3">
                                 <input type="text" autocapitalize="none" autocomplete="off" class="form-control you-have-value" />
                                 <button type="submit" class="btn btn-primary">Convert</button>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <button type="button" class="btn btn-danger" data-convertor-id="${convertorId}">Remove</button>
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-outline-primary">Down</button>
+                                    <button type="button" class="btn btn-outline-primary">Up</button>
+                                </div>
                             </div>
                         </form>
                     </div>
