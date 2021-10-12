@@ -49,14 +49,17 @@ var _app = {
     // Handle the displaying of calculations
     displayResult: function (value, isError) {
         document.querySelector('#result strong').innerHTML = value;
+        _app.changeResultBoxToStatus(isError);
+    },
 
-        // Change the style of the result box based on the error status
+    // Handle the chaning of the results box to an error box
+    changeResultBoxToStatus: function (isError) {
+        // Just toggle the class of the box based on the error value
         if (isError) {
             document.getElementById('result').classList.replace('alert-primary', 'alert-danger');
         } else {
             document.getElementById('result').classList.replace('alert-danger', 'alert-primary');
         }
-
     },
 
     // Handle the moudule output (this is capturing all the stdout)
