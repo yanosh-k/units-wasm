@@ -52,13 +52,20 @@ var _app = {
     initConvertors: function () {
         var convertorsList = _app.getConvertorsList();
         var convertorsHolder = document.getElementById('accordion-root');
-
+        var activeConvertors = document.querySelectorAll('.accordion-item-convertor');
+        
+        // Remove the old covnertors from the html
+        for (var i = 0; i < activeConvertors.length; i++) {
+            activeConvertors[i].remove();
+        }
+        
+        // Add the convertors to the html
         for (var convertorId in convertorsList) {
             var convertorName = _app.escapeHtml(convertorsList[convertorId].name);
             var youHave = _app.escapeHtml(convertorsList[convertorId].you_have);
             var youWant = _app.escapeHtml(convertorsList[convertorId].you_want);
             var convertorHtml = `
-            <div class="accordion-item">
+            <div class="accordion-item accordion-item-convertor">
                 <h2 class="accordion-header" id="accordion-item-${convertorId}-header">
                     <button type="button" class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#accordion-item-${convertorId}-body">
                         ${convertorName}
@@ -122,8 +129,9 @@ var _app = {
     },
 
     // Handle saving of new convertors
-    onCreateConvertorFormSubmit: function () {
-        var modalInstance = new bootstrap.Modal(document.getElementById('add-convertor-modal'));
+    onCreateConvertorFormSubmit: function (event) {
+        event.preventDefault();
+        var modalInstance = document.getElementById('add-convertor-modal');
         var convertorsList = _app.getConvertorsList();
 
         // Add the new convertor
@@ -136,7 +144,7 @@ var _app = {
         // Save the updated convertors list
         _app.setConvertorsList(convertorsList);
         // Hide the modal
-        modalInstance.toggle();
+        modalInstance.querySelector('.btn-close').dispatchEvent(new Event('click'));
         // Remove the data from the form
         this.reset();
         // Reload the convertos 
