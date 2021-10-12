@@ -23,6 +23,11 @@ var _app = {
                 _app.onConvertorFormSubmit.apply(event.target, [event]);
             }
         });
+        document.getElementById('accordion-root').addEventListener('click', function (event) {
+            if (event.target.classList.contains('btn-clear-input')) {
+                _app.onClearButtonClick.apply(event.target, [event]);
+            }
+        });
         document.getElementById('copy-result').addEventListener('click', _app.onCopyResultClick);
         document.addEventListener('runtime-init', _app.onRuntimeInit);
     },
@@ -62,9 +67,9 @@ var _app = {
                 <div id="accordion-item-${convertorId}-body" class="accordion-collapse collapse" data-bs-parent="#accordion-root">
                     <div class="accordion-body">
                         <form class="convertor">
+                            <input type="hidden" class="you-have" value="${youHave}" />
+                            <input type="hidden" class="you-want" value="${youWant}" />
                             <div class="input-group">
-                                <input type="hidden" class="you-have" value="${youHave}" />
-                                <input type="hidden" class="you-want" value="${youWant}" />
                                 <input type="text" autocapitalize="none" autocomplete="off" class="form-control you-have-value" />
                                 <button type="submit" class="btn btn-primary">Convert</button>
                             </div>
@@ -76,14 +81,22 @@ var _app = {
             convertorsHolder.insertAdjacentHTML('beforeend', convertorHtml);
         }
     },
-    
+
+    // Handle clearing of input fields
+    onClearButtonClick: function () {
+        var inputs = document.querySelectorAll(this.dataset.target);
+        for (var i = 0; i < inputs.length; i++) {
+            inputs[i].value = '';
+        }
+    },
+
     // Hanld convertors submission
-    onConvertorFormSubmit: function(event) {
+    onConvertorFormSubmit: function (event) {
         event.preventDefault();
         var youHaveValue = this.querySelector('.you-have-value').value;
         var youHave = this.querySelector('.you-have').value.replace(/@X@/g, youHaveValue);
         var youWant = this.querySelector('.you-want').value;
-        
+
         Module.ccall('convert_unit', 'string', ['string', 'string'], [youHave, youWant]);
     },
 
