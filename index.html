@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset="utf-8" />
-        <title>units-wasm</title>
+        <title>UnitsWASM Convertor</title>
 
         <meta name="description" content="units port for the web" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -26,25 +26,30 @@
 
 
                     <div id="accordion-root" class="accordion">
+                        
                         <div class="accordion-item">
                             <h2 class="accordion-header" id="accordion-item-main-header">
-                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#accordion-item-main-body">
+                                <button type="button" class="accordion-button" data-bs-toggle="collapse" data-bs-target="#accordion-item-main-body">
                                     Units Convertor
                                 </button>
                             </h2>
                             <div id="accordion-item-main-body" class="accordion-collapse collapse show" data-bs-parent="#accordion-root">
                                 <div class="accordion-body">
-
                                     <form id="main">
-
                                         <div class="mb-3">
                                             <label for="you-have" class="form-label">You have:</label>
-                                            <input type="text" autocapitalize="none" autocomplete="off" id="you-have" class="form-control" />
+                                            <div class="input-group">
+                                                <input type="text" autocapitalize="none" autocomplete="off" id="you-have" class="form-control" />
+                                                <button type="button" class="btn btn-outline-secondary">Clear</button>
+                                            </div>
                                         </div>
 
                                         <div class="mb-3">
                                             <label for="you-want" class="form-label">You want:</label>
-                                            <input type="text" autocapitalize="none" autocomplete="off" id="you-want" class="form-control" />
+                                            <div class="input-group">
+                                                <input type="text" autocapitalize="none" autocomplete="off" id="you-want" class="form-control" />
+                                                <button type="button" class="btn btn-outline-secondary">Clear</button>
+                                            </div>
                                         </div>
 
                                         <div class="d-flex justify-content-between">
@@ -52,7 +57,6 @@
                                             <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#add-convertor-modal">Add Convertor</button>
                                         </div>
                                     </form>
-
                                 </div>
                             </div>
                         </div>
@@ -64,14 +68,14 @@
         </div>
 
 
-        <div id="add-convertor-modal" class="modal" tabindex="-1">
+        <div id="add-convertor-modal" class="modal fade" tabindex="-1">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title">Add Convertor</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <form id="create">
+                    <form id="create-convertor">
                         <div class="modal-body">
                             <div class="mb-3">
                                 <label for="add-name" class="form-label">Name:</label>
@@ -107,9 +111,6 @@
                 </div>
             </div>
         </div>
-
-
-
 
         <div id="loader" class="position-fixed top-0 start-0 w-100 h-100 bg-light">
             <div class="d-flex justify-content-center position-absolute top-50 start-50 translate-middle">
