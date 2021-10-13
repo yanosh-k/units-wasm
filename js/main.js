@@ -28,7 +28,7 @@ var _app = {
             if (event.target.classList.contains('btn-clear-content')) {
                 _app.onClearButtonClick.apply(event.target, [event]);
             }
-            
+
             if (event.target.classList.contains('btn-remove-convertor')) {
                 _app.onRemoveConvertorButtonClick.apply(event.target, [event]);
             }
@@ -187,7 +187,13 @@ var _app = {
 
     // Handle copy result button click
     onCopyResultClick: function () {
-        navigator.clipboard.writeText(document.querySelector('#result strong').innerHTML);
+        var dataToCopy = document.querySelector('#result-value-holder').innerHTML;
+
+        if (typeof cordova === 'undefined') {
+            navigator.clipboard.writeText(dataToCopy);
+        } else {
+            cordova.plugins.clipboard.copy(dataToCopy);
+        }
     },
 
     // Handle saving of new convertors
@@ -213,25 +219,38 @@ var _app = {
         _app.initConvertors();
 
     },
-    
+
     // Handle the removing of a convertor
-    onRemoveConvertorButtonClick: function(event) {
+    onRemoveConvertorButtonClick: function (event) {
         event.preventDefault();
-        
-        // If the user does not confirm, just stop the function exection
-        if (!confirm('Are you sure you would like to delete this item? This cannot be undone.')) {
-            return;
+        var confirmationMessage = 'Are you sure you would like to delete this item? This cannot be undone.';
+
+        // Handle browser confirmation
+        if (typeof navigator.notification === 'undefined') {
+            // If the user does not confirm, just stop the function exection
+            if (!confirm(confirmationMessage)) {
+                return;
+            }
+            _app.handleRemoveConvertorConfirmation(event.target);
+        } else {
+            // Handle native app notification
+            navigator.notification.confirm(confirmationMessage, function (buttonIndex) {
+                if (buttonIndex === 1) {
+                    _app.handleRemoveConvertorConfirmation(event.target);
+                }
+            });
         }
-        
-        var targetForRemoving = document.querySelector(event.target.dataset.target);
+    },
+
+    // Called when a deletion confirmation is made
+    handleRemoveConvertorConfirmation: function (removeBtn) {
+        var targetForRemoving = document.querySelector(removeBtn.dataset.target);
         var convertorsList = _app.getConvertorsList();
-        
+
         // Remove the element from memory and html
         delete convertorsList[targetForRemoving.dataset.convertorId];
         _app.setConvertorsList(convertorsList);
         targetForRemoving.remove();
-        
-        
     },
 
     // Handle the displaying of calculations
