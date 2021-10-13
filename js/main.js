@@ -28,6 +28,10 @@ var _app = {
             if (event.target.classList.contains('btn-clear-content')) {
                 _app.onClearButtonClick.apply(event.target, [event]);
             }
+            
+            if (event.target.classList.contains('btn-remove-convertor')) {
+                _app.onRemoveConvertorButtonClick.apply(event.target, [event]);
+            }
         });
         document.getElementById('copy-result').addEventListener('click', _app.onCopyResultClick);
         document.addEventListener('runtime-init', _app.onRuntimeInit);
@@ -67,7 +71,7 @@ var _app = {
             var youHaveUnit = youHave.replace(/\s*\(?@X@\)?\s*/g, '');
             var youWant = _app.escapeHtml(convertorsList[convertorId].you_want);
             var convertorHtml = `
-            <div class="accordion-item accordion-item-convertor" data-convertor-id="${convertorId}">
+            <div id="accordion-item-${convertorId}" class="accordion-item accordion-item-convertor" data-convertor-id="${convertorId}">
                 <h2 class="accordion-header" id="accordion-item-${convertorId}-header">
                     <button type="button" class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#accordion-item-${convertorId}-body">
                         <span class="text-muted me-3 d-inline-block fs-4 sort-handle">&equiv;</span> ${convertorName}
@@ -88,7 +92,7 @@ var _app = {
                                     Options
                                   </button>
                                   <ul class="dropdown-menu">
-                                    <li><button type="button" class="dropdown-item text-danger">Remove</button></li>
+                                    <li><button type="button" class="btn-remove-convertor dropdown-item text-danger" data-target="#accordion-item-${convertorId}">Remove</button></li>
                                   </ul>
                                 </div>
                                 <button type="submit" class="btn btn-primary">Convert</button>
@@ -205,9 +209,29 @@ var _app = {
         modalInstance.querySelector('.btn-close').dispatchEvent(new Event('click'));
         // Remove the data from the form
         this.reset();
-        // Reload the convertos 
+        // Reload the convertors 
         _app.initConvertors();
 
+    },
+    
+    // Handle the removing of a convertor
+    onRemoveConvertorButtonClick: function(event) {
+        event.preventDefault();
+        
+        // If the user does not confirm, just stop the function exection
+        if (!confirm('Are you sure you would like to delete this item? This cannot be undone.')) {
+            return;
+        }
+        
+        var targetForRemoving = document.querySelector(event.target.dataset.target);
+        var convertorsList = _app.getConvertorsList();
+        
+        // Remove the element from memory and html
+        delete convertorsList[targetForRemoving.dataset.convertorId];
+        _app.setConvertorsList(convertorsList);
+        targetForRemoving.remove();
+        
+        
     },
 
     // Handle the displaying of calculations
@@ -245,7 +269,7 @@ var _app = {
     getConvertorsList: function () {
         var existingConvertors = _app.storageHandler.getItem('convertors');
 
-        // Initialize the convertos list
+        // Initialize the convertors list
         if (existingConvertors === null) {
             existingConvertors = _app.getDefaultConvertorsList();
             _app.setConvertorsList(existingConvertors);
