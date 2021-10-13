@@ -24,7 +24,7 @@ var _app = {
                 _app.onConvertorFormSubmit.apply(event.target, [event]);
             }
         });
-        document.getElementById('accordion-root').addEventListener('click', function (event) {
+        document.body.addEventListener('click', function (event) {
             if (event.target.classList.contains('btn-clear-content')) {
                 _app.onClearButtonClick.apply(event.target, [event]);
             }
@@ -145,9 +145,13 @@ var _app = {
 
     // Handle clearing of input fields
     onClearButtonClick: function () {
-        var inputs = document.querySelectorAll(this.dataset.target);
-        for (var i = 0; i < inputs.length; i++) {
-            inputs[i].value = '';
+        var targetElements = document.querySelectorAll(this.dataset.target);
+        for (var i = 0; i < targetElements.length; i++) {
+            if (targetElements[i].tagName.toLowerCase() === 'input') {
+                targetElements[i].value = '';
+            } else {
+                targetElements[i].innerHTML = '';
+            }
         }
     },
 
