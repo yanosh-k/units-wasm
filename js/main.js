@@ -12,6 +12,7 @@ var _app = {
         _app.bind();
         _app.initStorageHandler();
         _app.initConvertors();
+        _app.initConvertorsSorting();
     },
 
     // Do all the event bindings for the app
@@ -24,7 +25,7 @@ var _app = {
             }
         });
         document.getElementById('accordion-root').addEventListener('click', function (event) {
-            if (event.target.classList.contains('btn-clear-input')) {
+            if (event.target.classList.contains('btn-clear-content')) {
                 _app.onClearButtonClick.apply(event.target, [event]);
             }
         });
@@ -51,7 +52,7 @@ var _app = {
     // Reload the displayed convertors
     initConvertors: function () {
         var convertorsList = _app.getConvertorsList();
-        var convertorsHolder = document.getElementById('accordion-root');
+        var convertorsHolder = document.getElementById('convertors-holder');
         var activeConvertors = document.querySelectorAll('.accordion-item-convertor');
 
         // Remove the old covnertors from the html
@@ -63,12 +64,13 @@ var _app = {
         for (var convertorId in convertorsList) {
             var convertorName = _app.escapeHtml(convertorsList[convertorId].name);
             var youHave = _app.escapeHtml(convertorsList[convertorId].you_have);
+            var youHaveUnit = youHave.replace(/\s*\(?@X@\)?\s*/g, '');
             var youWant = _app.escapeHtml(convertorsList[convertorId].you_want);
             var convertorHtml = `
-            <div class="accordion-item accordion-item-convertor">
+            <div class="accordion-item accordion-item-convertor" data-convertor-id="${convertorId}">
                 <h2 class="accordion-header" id="accordion-item-${convertorId}-header">
                     <button type="button" class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#accordion-item-${convertorId}-body">
-                        ${convertorName}
+                        <span class="text-muted me-3 d-inline-block fs-4 sort-handle">&equiv;</span> ${convertorName}
                     </button>
                 </h2>
                 <div id="accordion-item-${convertorId}-body" class="accordion-collapse collapse" data-bs-parent="#accordion-root">
@@ -77,15 +79,19 @@ var _app = {
                             <input type="hidden" class="you-have" value="${youHave}" />
                             <input type="hidden" class="you-want" value="${youWant}" />
                             <div class="input-group mb-3">
-                                <input type="text" autocapitalize="none" autocomplete="off" class="form-control you-have-value" />
-                                <button type="submit" class="btn btn-primary">Convert</button>
+                                <input type="text" autocapitalize="none" autocomplete="off" id="you-have-value-${convertorId}" class="form-control you-have-value" />
+                                <button type="button" class="btn btn-outline-secondary btn-clear-content" data-target="#you-have-value-${convertorId}">Clear</button>
                             </div>
                             <div class="d-flex justify-content-between">
-                                <button type="button" class="btn btn-danger" data-convertor-id="${convertorId}">Remove</button>
-                                <div class="btn-group">
-                                    <button type="button" class="btn btn-outline-primary">Down</button>
-                                    <button type="button" class="btn btn-outline-primary">Up</button>
+                                <div class="dropdown">
+                                  <button class="btn btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                    Options
+                                  </button>
+                                  <ul class="dropdown-menu">
+                                    <li><button type="button" class="dropdown-item text-danger">Remove</button></li>
+                                  </ul>
                                 </div>
+                                <button type="submit" class="btn btn-primary">Convert</button>
                             </div>
                         </form>
                     </div>
@@ -94,6 +100,47 @@ var _app = {
 
             convertorsHolder.insertAdjacentHTML('beforeend', convertorHtml);
         }
+    },
+
+    // Intialize the sorting library for the convertors and the saving logic
+    initConvertorsSorting: function () {
+        var sortingRoot = document.getElementById('convertors-holder');
+
+        new Sortable(sortingRoot, {
+            handle: '.sort-handle',
+            draggable: '.accordion-item',
+            dataIdAttr: 'data-convertor-id',
+            store: {
+                get: function () {
+                    var convertorsList = _app.getConvertorsList();
+                    var order = [];
+
+                    // String keys, in insertion order (ES2015 guarantees this and all browsers comply),
+                    // are preserved for object properties
+                    for (var convertorId in convertorsList) {
+                        order.push(convertorId);
+                    }
+
+                    return order;
+                },
+                set: function (sortable) {
+                    // Load the sorted ids
+                    var sortedIds = sortable.toArray();
+                    // Load the data for the ids
+                    var convertorsList = _app.getConvertorsList();
+                    // Init a new sorted object for the convertors
+                    var orderedConvertorsList = {};
+
+
+                    // Create a new object with the new items order
+                    for (var i = 0; i < sortedIds.length; i++) {
+                        orderedConvertorsList[sortedIds[i]] = convertorsList[sortedIds[i]];
+                    }
+
+                    _app.setConvertorsList(orderedConvertorsList);
+                }
+            }
+        });
     },
 
     // Handle clearing of input fields
@@ -197,6 +244,7 @@ var _app = {
         // Initialize the convertos list
         if (existingConvertors === null) {
             existingConvertors = _app.getDefaultConvertorsList();
+            _app.setConvertorsList(existingConvertors);
         } else {
             existingConvertors = JSON.parse(existingConvertors);
         }

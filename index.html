@@ -18,15 +18,18 @@
 
 
                     <div id="result" class="alert alert-primary">
-                        Result: <strong class="fs-4 text"></strong>
-                        <button type="button" id="copy-result" class="btn btn-sm btn-outline-primary position-absolute top-50 end-0 translate-middle">
-                            Copy
-                        </button>
+                        <div class="result-holder mb-2">
+                            Result: <strong class="fs-4 text"></strong>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <button type="button" class="btn btn-sm btn-outline-primary btn-clear-content">Clear</button>
+                            <button type="button" id="copy-result" class="btn btn-sm btn-primary">Copy</button>
+                        </div>
                     </div>
 
 
                     <div id="accordion-root" class="accordion">
-                        
+
                         <div class="accordion-item">
                             <h2 class="accordion-header" id="accordion-item-main-header">
                                 <button type="button" class="accordion-button" data-bs-toggle="collapse" data-bs-target="#accordion-item-main-body">
@@ -40,7 +43,7 @@
                                             <label for="you-have" class="form-label">You have:</label>
                                             <div class="input-group">
                                                 <input type="text" autocapitalize="none" autocomplete="off" id="you-have" class="form-control" />
-                                                <button type="button" class="btn btn-outline-secondary btn-clear-input" data-target="#you-have">Clear</button>
+                                                <button type="button" class="btn btn-outline-secondary btn-clear-content" data-target="#you-have">Clear</button>
                                             </div>
                                         </div>
 
@@ -48,7 +51,7 @@
                                             <label for="you-want" class="form-label">You want:</label>
                                             <div class="input-group">
                                                 <input type="text" autocapitalize="none" autocomplete="off" id="you-want" class="form-control" />
-                                                <button type="button" class="btn btn-outline-secondary btn-clear-input" data-target="#you-want">Clear</button>
+                                                <button type="button" class="btn btn-outline-secondary btn-clear-content" data-target="#you-want">Clear</button>
                                             </div>
                                         </div>
 
@@ -60,7 +63,9 @@
                                 </div>
                             </div>
                         </div>
-
+                        <div id="convertors-holder">
+                            
+                        </div>
                     </div>
 
                 </div>
@@ -112,16 +117,17 @@
             </div>
         </div>
 
-        <div id="loader" class="position-fixed top-0 start-0 w-100 h-100 bg-light">
+        <div id="loader" class="bg-light modal-backdrop">
             <div class="d-flex justify-content-center position-absolute top-50 start-50 translate-middle">
                 <div class="spinner-border" role="status">
                     <span class="visually-hidden">Loading...</span>
                 </div>
             </div>
         </div>
-        
+
 
         <script src="./js/bootstrap.bundle.min.js"></script>
+        <script src="./js/sortable.min.js"></script>
         <script src="./js/main.js"></script>
         <script src="./a.out.js"></script>
     </body>
