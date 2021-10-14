@@ -165,15 +165,15 @@ var _app = {
         var youHave = this.querySelector('.you-have').value.replace(/@X@/g, youHaveValue);
         var youWant = this.querySelector('.you-want').value;
 
+        // Clear the result box
+        _app.displayResult('', false, true);
+
+        // Make the calculation
         Module.ccall('convert_unit', 'string', ['string', 'string'], [youHave, youWant]);
     },
 
     // Handle runtime initilization event
     onRuntimeInit: function () {
-        // Do a first initial calculation, to speedup all subsequent calls
-        Module.ccall('convert_unit', 'string', ['string', 'string'], ['1inch', 'm']);
-        _app.displayResult('', false);
-
         // Hide the preloader once the module intializes
         document.getElementById('loader').classList.add('invisible');
     },
@@ -181,6 +181,11 @@ var _app = {
     // Handle form calculations
     onMainFormSubmit: function (event) {
         event.preventDefault();
+
+        // Clear the result box
+        _app.displayResult('', false, true);
+
+        // Make the calculation
         Module.ccall('convert_unit', 'string', ['string', 'string'], [this['you-have'].value, this['you-want'].value]);
     },
 
@@ -253,8 +258,15 @@ var _app = {
     },
 
     // Handle the displaying of calculations
-    displayResult: function (value, isError) {
-        document.querySelector('#result strong').innerHTML = value;
+    displayResult: function (value, isError, doClear) {
+        var strippedOtuput = value.replace(/^\t\*\s/, '').replace(/^\s+Definition:\s/, '');
+
+        if (doClear) {
+            document.querySelector('#result strong').innerHTML = strippedOtuput;
+        } else {
+            document.querySelector('#result strong').innerHTML += strippedOtuput;
+        }
+
         _app.changeResultBoxToStatus(isError);
     },
 

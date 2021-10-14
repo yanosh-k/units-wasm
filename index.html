@@ -74,9 +74,10 @@
 
         <footer class="fixed-bottom bottom-0 start-0 bg-light border-top">
             <ul class="nav justify-content-center py-3">
-                <li class="nav-item"><a href="#help-modal" data-bs-toggle="modal" class="nav-link px-2 text-muted">Help</a></li>
                 <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">About</a></li>
                 <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">Privacy Policy</a></li>
+                <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">Units List</a></li>
+                <li class="nav-item"><a href="#help-modal" data-bs-toggle="modal" class="nav-link px-2 text-muted">Help</a></li>
             </ul>
         </footer>
 
@@ -126,7 +127,7 @@
         </div>
 
         <div id="help-modal" class="modal fade" tabindex="-1">
-            <div class="modal-dialog">
+            <div class="modal-dialog modal-dialog-scrollable">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title">Help</h5>
@@ -148,17 +149,160 @@
                         <pre class="text-danger"><code>You have: 3.277 hr<br />You want: time<br />Result: 3 hr + 16 min + 37.2 sec</code></pre>
                         <p>Complex expressions:</p>
                         <pre class="text-danger"><code>You have: (8/pi^2)(lbm/ft^3)ft(ft^3/s)^2(1/in^5)<br />You want: psi<br />Result: 43.533969</code></pre>
-                        
+
                         <h6 class="border-bottom pb-3">Overview</h6>
                         <p>The program converts quantities expressed in various systems of measurement to their equivalents in other systems of measurement. Like many similar programs, it can handle multiplicative scale changes. It can also handle nonlinear conversions such as Fahrenheit to Celsius. The program can also perform conversions from and to sums of units, such as converting between meters and feet plus inches.</p>
                         <p>Basic operation is simple: you enter the units that you want to convert from and the units that you want to convert to.</p>
                         <p>Beyond simple unit conversions, units can be used as a general-purpose scientific calculator that keeps track of units in its calculations. You can form arbitrary complex mathematical expressions of dimensions including sums, products, quotients, powers, and even roots of dimensions. Thus you can ensure accuracy and dimensional consistency when working with long expressions that involve many different units that may combine in complex ways.</p>
-                        
+
                         <h6 class="border-bottom pb-3">Interacting with the interface</h6>
                         <p>At the ‘You have:’ prompt, type the quantity and units that you are converting from. For example, if you want to convert ten meters to feet, type 10 meters. Next, enter the ‘You want:’ value. You should type the units you want to convert to. To convert to feet, you would type feet.</p>
                         <p>If you only want to find the reduced form or definition of a unit, simply leave the ‘You want:’ field empty. Here is an example:</p>
                         <pre class="text-danger"><code>You have: jansky<br />You want: <br />Result: fluxunit = 1e-26 W/m^2 Hz = 1e-26 kg / s^2</code></pre>
                         <p>The output indicates that the jansky is defined to be equal to a fluxunit which in turn is defined to be a certain combination of watts, meters, and hertz. The fully reduced (and in this case somewhat more cryptic) form appears on the far right.</p>
+
+                        <h6 class="border-bottom pb-3">Operators</h6>
+                        <p>You can enter more complicated units by combining units with operations such as multiplication, division, powers, addition, subtraction, and parentheses for grouping. Additionally, units supports some extensions, including high priority multiplication using a space, and a high priority numerical division operator (‘|’) that can simplify some expressions.</p>
+                        <p>You multiply units using a space or an asterisk (‘*’). The next example shows both forms:</p>
+                        <pre class="text-danger"><code>You have: arabicfoot * arabictradepound * force<br />You want: ft lbf<br />Result: 0.7296</code></pre>
+                        <p>You can divide units using the slash (‘/’) or with ‘per’:</p>
+                        <pre class="text-danger"><code>You have: furlongs per fortnight<br />You want: m/s<br />Result: 0.00016630986</code></pre>
+                        <p>You can use parentheses for grouping:</p>
+                        <pre class="text-danger"><code>You have: (1/2) kg / (kg/meter)<br />You want: league<br />Result: 0.00010356166</code></pre>
+                        <p>White space surrounding operators is optional, so the previous example could have used ‘(1/2)kg/(kg/meter)’. As a consequence, however, hyphenated spelled-out numbers (e.g., ‘forty-two’) cannot be used; ‘forty-two’ is interpreted as ‘40 - 2’.</p>
+                        <p>Multiplication using a space has a higher precedence than division using a slash and is evaluated left to right; in effect, the first ‘/’ character marks the beginning of the denominator of a unit expression. This makes it simple to enter a quotient with several terms in the denominator: ‘J / mol K’. The ‘*’ and ‘/’ operators have the same precedence, and are evaluated left to right; if you multiply with ‘*’, you must group the terms in the denominator with parentheses: ‘J / (mol * K)’.</p>
+                        <p>The higher precedence of the space operator may not always be advantageous. For example, ‘m/s s/day’ is equivalent to ‘m / s s day’ and has dimensions of length per time cubed. Similarly, ‘1/2 meter’ refers to a unit of reciprocal length equivalent to 0.5/meter, perhaps not what you would intend if you entered that expression. The get a half meter you would need to use parentheses: ‘(1/2) meter’. The ‘*’ operator is convenient for multiplying a sequence of quotients. For example, ‘m/s * s/day’ is equivalent to ‘m/day’. Similarly, you could write ‘1/2 * meter’ to get half a meter.</p>
+                        <p>The units program supports another option for numerical fractions: you can indicate division of numbers with the vertical bar (‘|’), so if you wanted half a meter you could write ‘1|2 meter’. You cannot use the vertical bar to indicate division of non-numerical units (e.g., ‘m|s’ results in an error message). </p>
+                        <p>Powers of units can be specified using the ‘^’ character, as shown in the following example, or by simple concatenation of a unit and its exponent: ‘cm3’ is equivalent to ‘cm^3’; if the exponent is more than one digit, the ‘^’ is required. You can also use ‘**’ as an exponent operator.</p>
+                        <pre class="text-danger"><code>You have: cm^3<br />You want: gallons<br />Result: 0.00026417205</code></pre>
+                        <p>Concatenation only works with a single unit name: if you write ‘(m/s)2’, units will treat it as multiplication by 2. When a unit includes a prefix, exponent operators apply to the combination, so ‘centimeter3’ gives cubic centimeters. If you separate the prefix from the unit with any multiplication operator (e.g., ‘centi meter^3’), the prefix is treated as a separate unit, so the exponent applies only to the unit without the prefix. The second example is equivalent to ‘centi * (meter^3)’, and gives a hundredth of a cubic meter, not a cubic centimeter. The units program is limited internally to products of 99 units; accordingly, expressions like ‘meter^100’ or ‘joule^34’ (represented internally as ‘kg^34 m^68 / s^68’) will fail.</p>
+                        <p>The ‘|’ operator has the highest precedence, so you can write the square root of two thirds as ‘2|3^1|2’. The ‘^’ operator has the second highest precedence, and is evaluated right to left, as usual:</p>
+                        <pre class="text-danger"><code>You have: 5 * 2^3^2<br />You want:<br />Result: 2560</code></pre>
+                        <p>With a dimensionless base unit, any dimensionless exponent is meaningful (e.g., ‘pi^exp(2.371)’). Even though angle is sometimes treated as dimensionless, exponents cannot have dimensions of angle:</p>
+                        <pre class="text-danger"><code>You have: 5 * 2^3^2<br />You want:<br />Result: Error in '2^radian': Exponent not dimensionless</code></pre>
+                        <p>If the base unit is not dimensionless, the exponent must be a rational number p/q, and the dimension of the unit must be a power of q, so ‘gallon^2|3’ works but ‘acre^2|3’ fails. An exponent using the slash (‘/’) operator (e.g., ‘gallon^(2/3)’) is also acceptable; the parentheses are needed because the precedence of ‘^’ is higher than that of ‘/’. Since units cannot represent dimensions with exponents greater than 99, a fully reduced exponent must have q < 100. When raising a non-dimensionless unit to a power, units attempts to convert a decimal exponent to a rational number with q < 100. If this is not possible units displays an error message:</p>
+                        <pre class="text-danger"><code>You have: ft^1.234<br />You want:<br />Result: Error in 'ft^1.234': Base unit not dimensionless; rational exponent required</code></pre>
+                        <p>A decimal exponent must match its rational representation to machine precision, so ‘acre^1.5’ works but ‘gallon^0.666’ does not.</p>
+
+                        <h6 class="border-bottom pb-3">Sums and Differences of Units</h6>
+                        <p>You may sometimes want to add values of different units that are outside the SI. You may also wish to use units as a calculator that keeps track of units. Sums of conformable units are written with the ‘+’ character, and differences with the ‘-’ character.</p>
+                        <pre class="text-danger"><code>You have: 2 hours + 23 minutes + 32 seconds<br />You want: seconds<br />Result: 8612</code></pre>
+                        <pre class="text-danger"><code>You have: 12 ft + 3 in<br />You want: cm<br />Result: 373.38</code></pre>
+                        <pre class="text-danger"><code>You have: 2 btu + 450 ft lbf<br />You want: btu<br />Result: 2.5782804</code></pre>
+                        <p>The expressions that are added or subtracted must reduce to identical expressions in primitive units, or an error message will be displayed:</p>
+                        <pre class="text-danger"><code>You have: 12 printerspoint - 4 heredium<br />You want:<br />Result: Error in '12 printerspoint - 4 heredium': Invalid sum or difference of non-conformable units</code></pre>
+                        <p>As usual, the precedence for ‘+’ and ‘-’ is lower than that of the other operators. A fractional quantity such as 2 1/2 cups can be given as ‘(2+1|2) cups’; the parentheses are necessary because multiplication has higher precedence than addition. If you omit the parentheses, units attempts to add ‘2’ and ‘1|2 cups’, and you get an error message:</p>
+                        <pre class="text-danger"><code>You have: 2+1|2 cups<br />You want:<br />Result: Error in '2+1|2 cups': Invalid sum or difference of non-conformable units</code></pre>
+                        <p>The expression could also be correctly written as ‘(2+1/2) cups’. If you write ‘2 1|2 cups’ the space is interpreted as multiplication so the result is the same as ‘1 cup’.</p>
+                        <p>The ‘+’ and ‘-’ characters sometimes appears in exponents like ‘3.43e+8’. This leads to an ambiguity in an expression like ‘3e+2 yC’. The unit ‘e’ is a small unit of charge, so this can be regarded as equivalent to ‘(3e+2) yC’ or ‘(3 e)+(2 yC)’. This ambiguity is resolved by always interpreting ‘+’ and ‘-’ as part of an exponent if possible.</p>
+
+                        <h6 class="border-bottom pb-3">Numbers as Units</h6>
+                        <p>For units, numbers are just another kind of unit. They can appear as many times as you like and in any order in a unit expression. For example, to find the volume of a box that is 2 ft by 3 ft by 12 ft in steres, you could do the following:</p>
+                        <pre class="text-danger"><code>You have: 2 ft 3 ft 12 ft<br />You want: stere<br />Result: 2.038813</code></pre>
+                        <pre class="text-danger"><code>You have: $ 5 / yard<br />You want: cents / inch<br />Result: 13.888889</code></pre>
+                        <p>And the second example shows how the dollar sign in the units conversion can precede the five. Be careful: units will interpret ‘$5’ with no space as equivalent to ‘dollar^5’.</p>
+
+                        <h6 class="border-bottom pb-3">Built-in Functions</h6>
+                        <p>Several built-in functions are provided: ‘sin’, ‘cos’, ‘tan’, ‘ln’, ‘log’, ‘exp’, ‘acos’, ‘atan’, ‘asin’, ‘cosh’, ‘sinh’, ‘tanh’, ‘acosh’, ‘asinh’, and ‘atanh’. The ‘sin’, ‘cos’, and ‘tan’ functions require either a dimensionless argument or an argument with dimensions of angle.</p>
+                        <pre class="text-danger"><code>You have: sin(30 degrees)<br />You want:<br />Result: 0.5</code></pre>
+                        <pre class="text-danger"><code>You have: sin(pi/2)<br />You want:<br />Result: 1</code></pre>
+                        <p>The other functions on the list require dimensionless arguments. The inverse trigonometric functions return arguments with dimensions of angle.</p>
+                        <p>The ‘ln’ and ‘log’ functions give natural log and log base 10 respectively. To obtain logs for any integer base, enter the desired base immediately after ‘log’. For example, to get log base 2 you would write ‘log2’ and to get log base 47 you could write ‘log47’.</p>
+                        <pre class="text-danger"><code>You have: log2(32)<br />You want:<br />Result: 5</code></pre>
+                        <pre class="text-danger"><code>You have: log3(32)<br />You want:<br />Result: 3.1546488</code></pre>
+                        <pre class="text-danger"><code>You have: log4(32)<br />You want:<br />Result: 2.5</code></pre>
+                        <p>If you wish to take roots of units, you may use the ‘sqrt’ or ‘cuberoot’ functions. These functions require that the argument have the appropriate root. You can obtain higher roots by using fractional exponents:</p>
+                        <pre class="text-danger"><code>You have: sqrt(acre)<br />You want: feet<br />Result: 208.71074</code></pre>
+
+                        <h6 class="border-bottom pb-3">Previous Result</h6>
+                        <p>You can insert the result of the previous conversion using the underscore (‘_’). It is useful when you want to convert the same input to several different units, for example:</p>
+                        <pre class="text-danger"><code>You have: 2.3 tonrefrigeration<br />You want: btu/hr<br />Result: 27600</code></pre>
+                        <pre class="text-danger"><code>You have: _<br />You want: kW<br />Result: 8.0887615</code></pre>
+                        <p>Suppose you want to do some deep frying that requires an oil depth of 2 inches. You have 1/2 gallon of oil, and want to know the largest-diameter pan that will maintain the required depth. The nonlinear unit ‘circlearea’ gives the radius of the circle in SI units; you want the diameter in inches:</p>
+                        <pre class="text-danger"><code>You have: 1|2 gallon / 2 in<br />You want: circlearea<br />Result: 0.10890173 m</code></pre>
+                        <pre class="text-danger"><code>You have: 2 _<br />You want: in<br />Result: 8.5749393</code></pre>
+                        <p>In most cases, surrounding white space is optional, so the previous example could have used ‘2_’. If ‘_’ follows a non-numerical unit symbol, however, the space is required:</p>
+                        <pre class="text-danger"><code>You have: m_<br />You want:<br />Result: Error in 'm_': Parse error</code></pre>
+                        <p>When ‘_’ is followed by a digit, the operation is multiplication rather than exponentiation, so that ‘_2’, is equivalent to ‘_ * 2’ rather than ‘_^2’.</p>
+                        <p>You can use the ‘_’ symbol any number of times; for example:</p>
+                        <pre class="text-danger"><code>You have: m<br />You want:<br />Result: 1 m</code></pre>
+                        <pre class="text-danger"><code>You have: _ _<br />You want:<br />Result: 1 m^2</code></pre>
+                        <p>Using ‘_’ before a conversion has been performed (e.g., immediately after invocation) generates an error:</p>
+                        <pre class="text-danger"><code>You have: _<br />You want:<br />Result: Error in '_': No previous result; '_' not set</code></pre>
+
+                        <h6 class="border-bottom pb-3">Complicated Unit Expressions</h6>
+                        <p>The units program is especially helpful in ensuring accuracy and dimensional consistency when converting lengthy unit expressions. For example, one form of the Darcy–Weisbach fluid-flow equation is:</p>
+                        <pre class="text-danger"><code>ΔP=(8/π^2)ρfL(Q^2/d^5)</code></pre>
+                        <p>where ΔP is the pressure drop, ρ is the mass density, f is the (dimensionless) friction factor, L is the length of the pipe, Q is the volumetric flow rate, and d is the pipe diameter. It might be desired to have the equation in the form:</p>
+                        <pre class="text-danger"><code>ΔP=A<sub>1</sub>ρfL(Q^2/d^5)</code></pre>
+                        <p>that accepted the user’s normal units; for typical units used in the US, the required conversion could be something like:</p>
+                        <pre class="text-danger"><code>You have: (8/pi^2)(lbm/ft^3)ft(ft^3/s)^2(1/in^5)<br />You want: psi<br />Result: 43.533969</code></pre>
+                        <p>The parentheses allow individual terms in the expression to be entered naturally, as they might be read from the formula. Alternatively, the multiplication could be done with the ‘*’ rather than a space; then parentheses are needed only around ‘ft^3/s’ because of its exponent:</p>
+                        <pre class="text-danger"><code>You have: 8/pi^2 * lbm/ft^3 * ft * (ft^3/s)^2 /in^5<br />You want: psi<br />Result: 43.533969</code></pre>
+                        <p>Without parentheses, and using spaces for multiplication, the previous conversion would need to be entered as:</p>
+                        <pre class="text-danger"><code>You have: 8 lb ft ft^3 ft^3 / pi^2 ft^3 s^2 in^5<br />You want: psi<br />Result: 43.533969</code></pre>
+
+                        <h6 class="border-bottom pb-3">Temperature Conversions</h6>
+                        <p>Conversions between temperatures are different from linear conversions between temperature increments—see the example below. The absolute temperature conversions are handled by units starting with ‘temp’, and you must use functional notation. The temperature-increment conversions are done using units starting with ‘deg’ and they do not require functional notation.</p>
+                        <pre class="text-danger"><code>You have: tempF(45)<br />You want: tempC<br />Result: 7.2222222</code></pre>
+                        <pre class="text-danger"><code>You have: 45 degF<br />You want: degC<br />Result: 25</code></pre>
+                        <p>Think of ‘tempF(x)’ not as a function but as a notation that indicates that x should have units of ‘tempF’ attached to it. The first conversion shows that if it’s 45 degrees Fahrenheit outside, it’s 7.2 degrees Celsius. The second conversion indicates that a change of 45 degrees Fahrenheit corresponds to a change of 25 degrees Celsius. The conversion from ‘tempF(x)’ is to absolute temperature, so that:</p>
+                        <pre class="text-danger"><code>You have: tempF(45)<br />You want: degR<br />Result: 504.67</code></pre>
+                        <p>gives the same result as:</p>
+                        <pre class="text-danger"><code>You have: tempF(45)<br />You want: tempR<br />Result: 504.67</code></pre>
+                        <p>But if you convert ‘tempF(x)’ to ‘degC’, the output is probably not what you expect:</p>
+                        <pre class="text-danger"><code>You have: tempF(45)<br />You want: degC<br />Result: 280.37222</code></pre>
+                        <p>The result is the temperature in K, because ‘degC’ is defined as ‘K’, the Kelvin. For consistent results, use the ‘tempX’ units when converting to a temperature rather than converting a temperature increment.</p>
+                        <p>The ‘tempC()’ and ‘tempF()’ definitions are limited to positive absolute temperatures, and giving a value that would result in a negative absolute temperature generates an error message:</p>
+                        <pre class="text-danger"><code>You have: tempC(-275)<br />You want:<br />Result: Error in 'tempC(-275)': Argument of function outside domain</code></pre>
+
+                        <h6 class="border-bottom pb-3">Other Nonlinear Units</h6>
+                        <p>Some other examples of nonlinear units are numerous different ring sizes and wire gauges, the grit sizes used for abrasives, the decibel scale, shoe size, scales for the density of sugar (e.g., baume). Wire gauges with multiple zeroes are signified using negative numbers where two zeroes is ‘-1’. Alternatively, you can use the synonyms ‘g00’, ‘g000’, and so on.</p>
+                        <pre class="text-danger"><code>You have: wiregauge(11)<br />You want: inches<br />Result: 0.090742002</code></pre>
+                        <pre class="text-danger"><code>You have: brwiregauge(g00)<br />You want: inches<br />Result: 0.348</code></pre>
+                        <pre class="text-danger"><code>You have: 1 mm<br />You want: wiregauge<br />Result: 18.201919</code></pre>
+                        <pre class="text-danger"><code>You have: grit_P(600)<br />You want: grit_ansicoated<br />Result: 342.76923</code></pre>
+                        <p>The last example shows the conversion from P graded sand paper, which is the European standard and may be marked “P600” on the back, to the USA standard.</p>
+                        <p>You can compute the area of a circle using the nonlinear unit, ‘circlearea’. You can also do this using the circularinch or circleinch. The next example shows two ways to compute the area of a circle with a five inch radius and one way to compute the volume of a sphere with a radius of one meter.</p>
+                        <pre class="text-danger"><code>You have: circlearea(5 in)<br />You want: in2<br />Result: 78.539816</code></pre>
+                        <pre class="text-danger"><code>You have: 10^2 circleinch<br />You want: in2<br />Result: 78.539816</code></pre>
+                        <pre class="text-danger"><code>You have: spherevol(meter)<br />You want: ft3<br />Result: 147.92573</code></pre>
+                        <p>The inverse of a nonlinear conversion is indicated by prefixing a tilde (‘~’) to the nonlinear unit name:</p>
+                        <pre class="text-danger"><code>You have: ~wiregauge(0.090742002 inches)<br />You want:<br />Result: 11</code></pre>
+
+                        <h6 class="border-bottom pb-3">Unit Lists: Conversion to Sums of Units</h6>
+                        <p>Outside of the SI, it is sometimes desirable to convert a single unit to a sum of units—for example, feet to feet plus inches. The conversion from sums of units was described in Sums and Differences of Units, and is a simple matter of adding the units with the ‘+’ sign:</p>
+                        <pre class="text-danger"><code>You have: 12 ft + 3 in + 3|8 in<br />You want: ft<br />Result: 12.28125</code></pre>
+                        <p>Although you can similarly write a sum of units to convert to, the result will not be the conversion to the units in the sum, but rather the conversion to the particular sum that you have entered:</p>
+                        <pre class="text-danger"><code>You have: 12.28125 ft<br />You want: ft + in + 1|8 in<br />Result: 11.228571</code></pre>
+                        <p>The unit expression given at the ‘You want:’ prompt is equivalent to asking for conversion to multiples of ‘1 ft + 1 in + 1|8 in’, which is 1.09375 ft, so the conversion in the previous example is equivalent to:</p>
+                        <pre class="text-danger"><code>You have: 12.28125 ft<br />You want: 1.09375 ft<br />Result: 11.228571</code></pre>
+                        <p>In converting to a sum of units like miles, feet and inches, you typically want the largest integral value for the first unit, followed by the largest integral value for the next, and the remainder converted to the last unit. You can do this conversion easily with units using a special syntax for lists of units. You must list the desired units in order from largest to smallest, separated by the semicolon (‘;’) character:</p>
+                        <pre class="text-danger"><code>You have: 12.28125 ft<br />You want: ft;in;1|8 in<br />Result: 12 ft + 3 in + 3|8 in</code></pre>
+                        <p>The conversion always gives integer coefficients on the units in the list, except possibly the last unit when the conversion is not exact:</p>
+                        <pre class="text-danger"><code>You have: 12.28126 ft<br />You want: ft;in;1|8 in<br />Result:  12 ft + 3 in + 3.00096 * 1|8 in</code></pre>
+                        <p>The order in which you list the units is important:</p>
+                        <pre class="text-danger"><code>You have: 3 kg<br />You want: oz;lb<br />Result:  105 oz + 0.051367866 lb</code></pre>
+                        <pre class="text-danger"><code>You have: 3 kg<br />You want: lb;oz<br />Result:  6 lb + 9.8218858 oz</code></pre>
+                        <p>Listing ounces before pounds produces a technically correct result, but not a very useful one. You must list the units in descending order of size in order to get the most useful result.</p>
+                        <p>Ending a unit list with the separator ‘;’ has the same effect as repeating the last unit on the list, so ‘ft;in;1|8 in;’ is equivalent to ‘ft;in;1|8 in;1|8 in’. With the example above, this gives:</p>
+                        <pre class="text-danger"><code>You have: 12.28126 ft<br />You want: ft;in;1|8 in;<br />Result:  12 ft + 3 in + 3|8 in + 0.00096 * 1|8 in</code></pre>
+                        <p>in effect separating the integer and fractional parts of the coefficient for the last unit. If you instead prefer to round the last coefficient to an integer you can do this with the --round (-r) option. With the previous example, the result is:</p>
+                        <pre class="text-danger"><code>You have: 12.28126 ft<br />You want: ft;in;1|8 in<br />Result:  12 ft + 3 in + 3|8 in (rounded down to nearest 1|8 in)</code></pre>
+                        <p>Each unit that appears in the list must be conformable with the first unit on the list, and of course the listed units must also be conformable with the unit that you enter at the ‘You have:’ prompt.</p>
+                        <p>In North America, recipes for cooking typically measure ingredients by volume, and use units that are not always convenient multiples of each other. Suppose that you have a recipe for 6 and you wish to make a portion for 1. If the recipe calls for 2 1/2 cups of an ingredient, you might wish to know the measurements in terms of measuring devices you have available, you could use units and enter:</p>
+                        <pre class="text-danger"><code>You have: (2+1|2) cup / 6<br />You want: cup;1|2 cup;1|3 cup;1|4 cup;tbsp;tsp;1|2 tsp;1|4 tsp<br />Result:  1|3 cup + 1 tbsp + 1 tsp</code></pre>
+                        <p>By default, if a unit in a list begins with fraction of the form 1|x and its multiplier is an integer, the fraction is given as the product of the multiplier and the numerator; for example:</p>
+                        <pre class="text-danger"><code>You have: 12.28125 ft<br />You want: ft;in;1|8 in;<br />Result:  12 ft + 3 in + 3|8 in</code></pre>
+                        <p>The units program provides shorthand names for some common combinations:</p>
+                        <pre class="text-danger"><code>hms = hours, minutes, seconds</code></pre>
+                        <pre class="text-danger"><code>dms = angle: degrees, minutes, seconds</code></pre>
+                        <pre class="text-danger"><code>time = years, days, hours, minutes and seconds</code></pre>
+                        <pre class="text-danger"><code>usvol = US cooking volume: cups and smaller</code></pre>
+                        <p>Using these shorthands, or unit list aliases, you can do the following conversions:</p>
+                        <pre class="text-danger"><code>You have: anomalisticyear<br />You want: time<br />Result:  1 year + 25 min + 3.4653216 sec</code></pre>
+                        <p>You cannot combine a unit list alias with other units: it must appear alone at the ‘You want:’ prompt.</p>
+                        <p>You can display the definition of a unit list alias by entering it at the ‘You have:’ prompt.</p>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
