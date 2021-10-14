@@ -175,7 +175,7 @@ var _app = {
     // Handle runtime initilization event
     onRuntimeInit: function () {
         // Load the units definitions in the units list modal
-        document.querySelector('#units-list-modal .modal-body').innerHTML = new TextDecoder().decode(FS.readFile('/usr/local/share/units/units.list'));
+        document.getElementById('units-list-content').innerHTML = new TextDecoder().decode(FS.readFile('/usr/local/share/units/units.list'));
         
         // Hide the preloader once the module intializes
         document.getElementById('loader').classList.add('invisible');
