@@ -68,13 +68,12 @@ var _app = {
         for (var convertorId in convertorsList) {
             var convertorName = _app.escapeHtml(convertorsList[convertorId].name);
             var youHave = _app.escapeHtml(convertorsList[convertorId].you_have);
-            var youHaveUnit = youHave.replace(/\s*\(?@X@\)?\s*/g, '');
             var youWant = _app.escapeHtml(convertorsList[convertorId].you_want);
             var convertorHtml = `
             <div id="accordion-item-${convertorId}" class="accordion-item accordion-item-convertor" data-convertor-id="${convertorId}">
                 <h2 class="accordion-header" id="accordion-item-${convertorId}-header">
                     <button type="button" class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#accordion-item-${convertorId}-body">
-                        <span class="text-muted me-3 d-inline-block fs-4 sort-handle">&equiv;</span> ${convertorName}
+                        <span class="text-muted me-3 d-inline-block fs-1 sort-handle">&equiv;</span> ${convertorName}
                     </button>
                 </h2>
                 <div id="accordion-item-${convertorId}-body" class="accordion-collapse collapse" data-bs-parent="#accordion-root">
