@@ -75,8 +75,8 @@
         <footer class="fixed-bottom bottom-0 start-0 bg-light border-top">
             <ul class="nav justify-content-center py-3">
                 <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">About</a></li>
-                <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">Privacy Policy</a></li>
-                <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">Units List</a></li>
+                <li class="nav-item"><a href="#privacy-policy-modal" data-bs-toggle="modal" class="nav-link px-2 text-muted">Privacy Policy</a></li>
+                <li class="nav-item"><a href="#units-list-modal" data-bs-toggle="modal" class="nav-link px-2 text-muted">Units List</a></li>
                 <li class="nav-item"><a href="#help-modal" data-bs-toggle="modal" class="nav-link px-2 text-muted">Help</a></li>
             </ul>
         </footer>
@@ -310,6 +310,43 @@
                 </div>
             </div>
         </div>
+
+        <div id="privacy-policy-modal" class="modal fade" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Privacy Policy</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>We do not collect any data.</p>
+                        <p>We do not use any tracking or profiling tools and platforms.</p>
+                        <p>We do not use any third-party services.</p>
+                        <p>This app does not collect any information, does not use cookies and does not make any network requests to the Internet.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Add</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="units-list-modal" class="modal fade" tabindex="-1">
+            <div class="modal-dialog modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Units List</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body"></div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
 
         <div id="loader" class="bg-light modal-backdrop">
             <div class="d-flex justify-content-center position-absolute top-50 start-50 translate-middle">
