@@ -74,7 +74,7 @@
 
         <footer class="fixed-bottom bottom-0 start-0 bg-light border-top">
             <ul class="nav justify-content-center py-3">
-                <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">About</a></li>
+                <li class="nav-item"><a href="#about-modal" data-bs-toggle="modal" class="nav-link px-2 text-muted">About</a></li>
                 <li class="nav-item"><a href="#privacy-policy-modal" data-bs-toggle="modal" class="nav-link px-2 text-muted">Privacy Policy</a></li>
                 <li class="nav-item"><a href="#units-list-modal" data-bs-toggle="modal" class="nav-link px-2 text-muted">Units List</a></li>
                 <li class="nav-item"><a href="#help-modal" data-bs-toggle="modal" class="nav-link px-2 text-muted">Help</a></li>
@@ -306,7 +306,6 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary">Search</button>
                     </div>
                 </div>
             </div>
@@ -331,7 +330,55 @@
                 </div>
             </div>
         </div>
-        
+
+        <div id="about-modal" class="modal fade" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">About</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>This app is based on <a href="https://www.gnu.org/software/units/" target="_blank">GNU Units</a> - a Unit Conversion Program and Scientific Calculator. The help section is almost fully copied from the original <a href="https://www.gnu.org/software/units/manual/units.html" target="_blank">manual page</a>. And it actually uses the original program for making all the calculations. To make this work, the original C code for the units command line utility was ported to <a href="https://webassembly.org/" target="_blank">WebAssembly</a> (using the <a href="https://emscripten.org/" target="_blank">emscripten</a> compiler and toolchain) and is used as a back-end for doing all the conversions and calculations.</p>
+                        <p>The interface is built using <a href="https://getbootstrap.com/" target="_blank">Bootstrap 5</a> and <a href="https://sortablejs.github.io/Sortable/" target="_blank">SortableJS</a>.</p>
+                        <p>The the html, css and javascript code were converted to a native app format using <a href="https://cordova.apache.org/" target="_blank">Apache Cordova</a></p>
+                        <p>Most units data was drawn from:</p>
+                        <ol>
+                            <li>NIST Special Publication 811, Guide for the Use of the International System of Units (SI). Barry N. Taylor. 2008 https://www.nist.gov/pml/special-publication-811</li>
+                            <li>CRC Handbook of Chemistry and Physics 70th edition</li>
+                            <li>Oxford English Dictionary</li>
+                            <li>Webster's New Universal Unabridged Dictionary</li>
+                            <li>Units of Measure by Stephen Dresner</li>
+                            <li>A Dictionary of English Weights and Measures by Ronald Zupko</li>
+                            <li>British Weights and Measures by Ronald Zupko</li>
+                            <li>Realm of Measure by Isaac Asimov</li>
+                            <li>United States standards of weights and measures, their creation and creators by Arthur H. Frazier.</li>
+                            <li>French weights and measures before the Revolution: a dictionary of provincial and local units by Ronald Zupko</li>
+                            <li>Weights and Measures: their ancient origins and their development in Great Britain up to AD 1855 by FG Skinner</li>
+                            <li>The World of Measurements by H. Arthur Klein</li>
+                            <li>For Good Measure by William Johnstone</li>
+                            <li>NTC's Encyclopedia of International Weights and Measures by William Johnstone</li>
+                            <li>Sizes by John Lord</li>
+                            <li>Sizesaurus by Stephen Strauss</li>
+                            <li>CODATA Recommended Values of Physical Constants available at http://physics.nist.gov/cuu/Constants/index.html</li>
+                            <li>How Many?  A Dictionary of Units of Measurement.  Available at http://www.ibiblio.org/units/</li>
+                            <li>Numericana.  http://www.numericana.com</li>
+                            <li>UK history of measurement http://www.ukmetrication.com/history.htm</li>
+                            <li>NIST Handbook 44, Specifications, Tolerances, and Other Technical Requirements for Weighing and MeasuringDevices. 2011</li>
+                            <li>NIST Special Publication 447, Weights and Measures Standards of the the United States: a brief history. Lewis V. Judson. 1963; rev. 1976</li>
+                            <li>CRC Handbook of Chemistry and Physics, 96th edition</li>
+                            <li>Dictionary of Scientific Units, 6th ed.  H.G.  Jerrard and D.B. McNeill. 1992</li>
+                            <li>NIST Special Publication 330, The International System of Units (SI). ed. Barry N. Taylor and Ambler Thompson. 2008 https://www.nist.gov/pml/special-publication-330</li>
+                            <li>BIPM Brochure, The International System of Units (SI). 9th ed., 2019 https://www.bipm.org/en/publications/si-brochure/</li>
+                        </ol>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div id="units-list-modal" class="modal fade" tabindex="-1">
             <div class="modal-dialog modal-dialog-scrollable">
                 <div class="modal-content">
@@ -346,12 +393,11 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary">Search</button>
                     </div>
                 </div>
             </div>
         </div>
-        
+
 
         <div id="loader" class="bg-light modal-backdrop">
             <div class="d-flex justify-content-center position-absolute top-50 start-50 translate-middle">
