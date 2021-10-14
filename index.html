@@ -7,26 +7,25 @@
         <meta name="description" content="units port for the web" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link href="css/bootstrap.min.css" rel="stylesheet" />
+        <link href="css/styles.css" rel="stylesheet" />
     </head>
     <body>
 
+        <div id="result" class="alert alert-primary position-sticky top-0 start-0 rounded-0 px-4">
+            <div class="result-holder mb-2">
+                Result: <strong id="result-value-holder" class="fs-4 text"></strong>
+            </div>
+            <div class="d-flex justify-content-between">
+                <button type="button" class="btn btn-sm btn-outline-primary btn-clear-content" data-target="#result-value-holder">Clear</button>
+                <button type="button" id="copy-result" class="btn btn-sm btn-primary">Copy</button>
+            </div>
+        </div>
+
+
+
         <div class="container px-4">
             <div class="row justify-content-center gx-5">
-                <div class="col-12 mt-3">
-
-
-
-
-                    <div id="result" class="alert alert-primary">
-                        <div class="result-holder mb-2">
-                            Result: <strong id="result-value-holder" class="fs-4 text"></strong>
-                        </div>
-                        <div class="d-flex justify-content-between">
-                            <button type="button" class="btn btn-sm btn-outline-primary btn-clear-content" data-target="#result-value-holder">Clear</button>
-                            <button type="button" id="copy-result" class="btn btn-sm btn-primary">Copy</button>
-                        </div>
-                    </div>
-
+                <div class="col-12">
 
                     <div id="accordion-root" class="accordion">
 
@@ -73,6 +72,15 @@
         </div>
 
 
+        <footer class="fixed-bottom bottom-0 start-0 bg-light border-top">
+            <ul class="nav justify-content-center py-3">
+                <li class="nav-item"><a href="#help-modal" data-bs-toggle="modal" class="nav-link px-2 text-muted">Help</a></li>
+                <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">About</a></li>
+                <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">Privacy Policy</a></li>
+            </ul>
+        </footer>
+
+
         <div id="add-convertor-modal" class="modal fade" tabindex="-1">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -117,6 +125,48 @@
             </div>
         </div>
 
+        <div id="help-modal" class="modal fade" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Help</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <h6 class="border-bottom pb-3">Examples</h6>
+                        <p>Simple conversion:</p>
+                        <pre class="text-danger"><code>You have: mile<br />You want: km<br />Result: 1.609344</code></pre>
+                        <p>Conversion of absolute temperatures:</p>
+                        <pre class="text-danger"><code>You have: tempF(45)<br />You want: tempC<br />Result: 7.2222222</code></pre>
+                        <p>Converting from a sum of units:</p>
+                        <pre class="text-danger"><code>You have: 17 yards + 2 feet<br />You want: meter<br />Result: 16.1544</code></pre>
+                        <p>Converting to a sum of units such as hours plus minutes or feet plus inches:</p>
+                        <pre class="text-danger"><code>You have: 7 meters<br />You want: ft;in<br />Result: 22 ft + 11.590551 in</code></pre>
+                        <p>Converting a sixth of a (US) cup to common US measures:</p>
+                        <pre class="text-danger"><code>You have: 1|6 cup<br />You want: usvol<br />Result: 2 tbsp + 2 tsp</code></pre>
+                        <p>Converting decimal value time:</p>
+                        <pre class="text-danger"><code>You have: 3.277 hr<br />You want: time<br />Result: 3 hr + 16 min + 37.2 sec</code></pre>
+                        <p>Complex expressions:</p>
+                        <pre class="text-danger"><code>You have: (8/pi^2)(lbm/ft^3)ft(ft^3/s)^2(1/in^5)<br />You want: psi<br />Result: 43.533969</code></pre>
+                        
+                        <h6 class="border-bottom pb-3">Overview</h6>
+                        <p>The program converts quantities expressed in various systems of measurement to their equivalents in other systems of measurement. Like many similar programs, it can handle multiplicative scale changes. It can also handle nonlinear conversions such as Fahrenheit to Celsius. The program can also perform conversions from and to sums of units, such as converting between meters and feet plus inches.</p>
+                        <p>Basic operation is simple: you enter the units that you want to convert from and the units that you want to convert to.</p>
+                        <p>Beyond simple unit conversions, units can be used as a general-purpose scientific calculator that keeps track of units in its calculations. You can form arbitrary complex mathematical expressions of dimensions including sums, products, quotients, powers, and even roots of dimensions. Thus you can ensure accuracy and dimensional consistency when working with long expressions that involve many different units that may combine in complex ways.</p>
+                        
+                        <h6 class="border-bottom pb-3">Interacting with the interface</h6>
+                        <p>At the ‘You have:’ prompt, type the quantity and units that you are converting from. For example, if you want to convert ten meters to feet, type 10 meters. Next, enter the ‘You want:’ value. You should type the units you want to convert to. To convert to feet, you would type feet.</p>
+                        <p>If you only want to find the reduced form or definition of a unit, simply leave the ‘You want:’ field empty. Here is an example:</p>
+                        <pre class="text-danger"><code>You have: jansky<br />You want: <br />Result: fluxunit = 1e-26 W/m^2 Hz = 1e-26 kg / s^2</code></pre>
+                        <p>The output indicates that the jansky is defined to be equal to a fluxunit which in turn is defined to be a certain combination of watts, meters, and hertz. The fully reduced (and in this case somewhat more cryptic) form appears on the far right.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div id="loader" class="bg-light modal-backdrop">
             <div class="d-flex justify-content-center position-absolute top-50 start-50 translate-middle">
                 <div class="spinner-border" role="status">
@@ -125,10 +175,11 @@
             </div>
         </div>
 
+
         <script src="cordova.js"></script>
         <script src="./js/bootstrap.bundle.min.js"></script>
         <script src="./js/sortable.min.js"></script>
-        <script src="./js/main.js"></script>
+        <script src="./js/scripts.js"></script>
         <script src="./a.out.js"></script>
     </body>
 </html>

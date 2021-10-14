@@ -1,0 +1,8 @@
+/* Spacing for the fixed footer */
+body {
+    padding-bottom: 100px;
+}
+
+.position-sticky {
+    z-index: 10;
+}
