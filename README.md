@@ -1,6 +1,6 @@
 Description:
 ===========
-This is web-based front-end for the WASM port of the the popular [units](https://www.gnu.org/software/units/) command line tool.
+This is a web-based front-end for the WASM port of the the popular [units](https://www.gnu.org/software/units/) command line tool.
 
 More about the WASM port can be found [here](https://github.com/yanosh-k/gnu-wasmunits).
 
